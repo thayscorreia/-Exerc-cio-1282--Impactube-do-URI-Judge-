@@ -1,0 +1,127 @@
+#A ImpacTube, uma famosa empresa de compartilhamento de vídeos, quer premiar alguns de seus mais notáveis criadores de conteúdo e, para isso,
+montará uma tabela com alguns canais que possuem grande quantidade de usuários inscritos. Os usuários inscritos em um canal são notificados 
+quando um novo vídeo é postado.
+No site da ImpacTube, os canais geram renda para seus criadores de conteúdo por meio de diversos mecanismos, a conhecida "monetização", o que
+geralmente é influenciado pela quantidade de usuários inscritos e que acessam aos vídeos postados.
+A tabela terá a seguinte estrutura:
+O nome do canal;
+A quantidade atual de inscritos;
+A monetização do último mês do canal e;
+Um valor indicando se o canal produz conteúdo premium, que são vídeos exclusivos para usuários que pagam uma mensalidade à ImpacTube.
+Com esses dados será possível definir a bonificação de cada canal, que será composta pelo valor "monetização" da tabela acrescido de um valor 
+fixo para cada mil inscritos.
+O valor fixo será definido pela ImpacTube, sendo um para canais com conteúdo premium e outro para os que não possuem conteúdo premium. A Figura 
+1 ilustra um exemplo dessa tabela.
+
+Figura 1 - Exemplo de tabela com canais selecionados para receberem bonificação.
+Você foi escolhido para desenvolver um programa que receberá como entrada os dados de cada canal, gerando internamente a tabela modelo, e que mostrará 
+os nomes dos canais, na ordem em que foram dados na entrada, acompanhados do valor que receberão como bonificação. Observe cuidadosamente o formato de 
+entrada e o formato de saída especificados.
+
+Entrada
+
+Na primeira linha será informado um valor inteiro que representa a quantidade N (1 <= N <= 200) de canais da tabela;
+Em cada uma das N linhas seguintes serão informados os registros que compõem a tabela, com os valores das colunas separados por um ponto e vírgula, nesta 
+ordem: (1) uma string com o nome do canal que será bonificado; (2) um número natural que é a quantidade de inscritos no canal; (3) um valor real simbolizando 
+a monetização do canal no mês anterior (dado em reais R$) e; (4) uma string 'sim' ou 'não', sem apóstrofos e completamente em minúsculo, que indica se o canal
+produz conteúdo premium;
+Por fim, serão informados dois valores reais, um em cada linha, que indicam o valor fixo que os canais receberão a mais para cada mil inscritos no canal. 
+O primeiro valor é referente aos canais que possuem conteúdo premium e o segundo para canais que não possuem, ambos os valores estão em R$ (reais).
+
+Saída
+
+O cabeçalho com a palavra 'BÔNUS', sem apóstrofos e completamente em maiúsculo e, nas próximas N linhas, os nomes dos canais, na mesma ordem em que foram 
+dados na entrada, acompanhados à direita pelo valor que receberão como bonificação, em reais e com duas casas decimais, exatamente como consta nos exemplos.
+Tome cuidado com a quantidade de hifens no cabeçalho.
+
+
+Samples Input	                                                      Samples Output
+
+
+8                                                                       -----                                         
+Clow Podcast;2700000;500.99;não                                         BÔNUS
+Felipe Nelson;3500000;1000.25;sim                                       -----
+Porta dos Mundos;16800000;2000.00;sim                                   Clow Podcast: R$ 1850.99
+PodHá!;2120000;450.00;não                                               Felipe Nelson: R$ 4500.25
+Winter SonNones;42400000;20000.00;sim                                   Porta dos Mundos: R$ 18800.00
+Manual do Urso;14600000;1800.50;sim                                     PodHá!: R$ 1510.00
+Humorado Games;4130000;5000.00;não                                      Winter SonNones: R$ 62400.00
+Joãozinho TôComeçando;950;10.00;não                                     Manual do Urso: R$ 16400.50
+1.00                                                                    Humorado Games: R$ 7065.00
+0.50                                                                    Joãozinho TôComeçando: R$ 10.00
+
+5                                                                        -----                                                 
+Canal A;2000;100.00;não                                                  BÔNUS
+Canal B;1000;100.00;não                                                  -----
+Canal C;1999;100.00;não                                                  Canal A: R$ 101.00
+Canal D;999;100.00;não                                                   Canal B: R$ 100.50
+Canal E;1;100.00;não                                                     Canal C: R$ 100.50
+2.00                                                                     Canal D: R$ 100.00
+0.50                                                                     Canal E: R$ 100.00
+
+
+7                                                                         -----
+Canal A;2000;100.00;sim                                                   BÔNUS
+Canal B;2000;100.00;não                                                   -----
+Canal C;1000;100.00;sim                                                  Canal A: R$ 100.02
+Canal D;1999;100.00;não                                                  Canal B: R$ 102.00
+Canal E;999;100.00;sim                                                   Canal C: R$ 100.01
+Canal F;1;100.00;sim                                                     Canal D: R$ 101.00
+Canal G;15000;0.00;não                                                   Canal E: R$ 100.00
+0.01                                                                     Canal F: R$ 100.00
+1.00                                                                     Canal G: R$ 15.00
+
+
+5                                                                          -----
+Canal A;2000;100.00;sim                                                    BÔNUS
+Canal B;1000;100.00;sim                                                    -----
+Canal C;1999;100.00;sim                                                    Canal A: R$ 104.00
+Canal D;999;100.00;sim                                                     Canal B: R$ 102.00
+Canal E;1;100.00;sim                                                       Canal C: R$ 102.00
+2.00                                                                       Canal D: R$ 100.00
+0.50                                                                       Canal E: R$ 100.00
+
+
+6                                                                            -----
+Canal A;2000;100.00;sim                                                      BÔNUS
+Canal B;1000;100.00;sim                                                      -----
+Canal C;1999;100.00;sim                                                      Canal A: R$ 100.02         
+Canal D;999;100.00;sim                                                       Canal B: R$ 100.01
+Canal E;1;100.00;sim                                                         Canal C: R$ 100.01
+Canal F;15000;0.00;não                                                       Canal D: R$ 100.00
+0.01                                                                         Canal E: R$ 100.00
+1.00                                                                         Canal F: R$ 15.00
+
+--------------------------------- Resolução em Python -------------------------------------------
+
+def preenche_tabela(qtd_canais):
+    tabela = []
+    for i in range(qtd_canais):
+        linha = input().split(';')
+        linha[1] = int(linha[1])
+        linha[2] = float(linha[2])
+        linha[3] = linha[3] == 'sim'
+        tabela.append(linha)
+    return tabela
+
+tabela = []
+qtd = int(input())
+bonus = []
+
+tabela = preenche_tabela(qtd)
+
+
+premium = float(input())
+naopremium = float(input())
+
+for i in range(len(tabela)):
+    if tabela[i][3] == True:
+        linha = ((tabela[i][1]//1000)*premium)+tabela[i][2]
+        bonus.append(linha)
+    if tabela[i][3] == False:
+        linha = ((tabela[i][1]//1000)*naopremium)+tabela[i][2]
+        bonus.append(linha)
+
+print('-----\nBÔNUS\n-----')
+for i in range(qtd):
+    print(f'{tabela[i][0]}: R$ {bonus[i]:.2f}')
